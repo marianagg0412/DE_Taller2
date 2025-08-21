@@ -9,10 +9,16 @@ from pymongo import MongoClient
 from datetime import datetime
 import time
 import logging
-
+import os
+from dotenv import load_dotenv
 
 class MercadoLibreScraper:
-    def __init__(self, mongo_uri="mongodb://mariana:1234@localhost:27017/mydatabase?authSource=admin", database_name="mydatabase", collection_name="mercadolibre"):
+    def __init__(self, mongo_uri=None, database_name=None, collection_name="mercadolibre"):
+        load_dotenv()
+        if mongo_uri is None:
+            mongo_uri = os.getenv("MONGO_URI")
+        if database_name is None:
+            database_name = os.getenv("MONGO_DBNAME", "mydatabase")
 
         self.client = MongoClient(mongo_uri)
         self.db = self.client[database_name]
